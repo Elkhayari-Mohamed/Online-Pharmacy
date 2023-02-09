@@ -1,0 +1,93 @@
+<?php
+
+  $_ROUTES_ASSIGNS = [
+    "id",
+    "search",
+    "page",
+    "records",
+    "category",
+    "brand",
+    "min",
+    "max"
+  ];
+
+  $_ROUTES_FETCHS = [];
+  foreach($_ROUTES_ASSIGNS as $i => $key) {
+    // if we can't fetch the key value from ROUTES then we just skip
+    if( !array_key_exists($i, $_ROUTES) || $_ROUTES[$i] == skipSelector ) $_ROUTES[$i] = "";
+
+    $_ROUTES_FETCHS[ $key ] = $_ROUTES[$i];
+  }
+
+  extract($_ROUTES_FETCHS);
+  unset($_ROUTES_ASSIGNS);
+  unset($_ROUTES_FETCHS);
+
+
+  // Start api program
+  if( is_numeric($records) && intval($records) <= 0 ) killRouter("Fetching error, the records value must be greater than 0.");
+
+  $queryFilter = "";
+  $queryLimiter = "LIMIT ";
+  $queryOrder = "ORDER BY Stock DESC, Id DESC";
+
+  if(is_numeric($id))
+    $queryFilter .= " AND Id='$id'";
+  else {
+
+    if( $search ) $queryFilter .= " AND Title LIKE '%$search%'";
+    if( $category ) $queryFilter .= " AND Category='$category'";
+    if( $min && floatval($min) ) {
+      $minDhs = floatval($min / EURO_MAD_RATIO);
+      $queryFilter .= " AND Price>='$minDhs'";
+    }
+    if( $max && floatval($max) ) {
+      $maxDhs = floatval($max / EURO_MAD_RATIO);
+      $queryFilter .= " AND Price<='$maxDhs'";
+    }
+
+    if( !$page ) $page = 1;
+    if( !$records ) $records = 1;
+    $startIndex = ($page - 1) * $records;
+
+    $queryLimiter .= "$startIndex, $records";
+
+  }
+
+  if( $queryLimiter == "LIMIT " ) $queryLimiter = "";
+
+  $query = "SELECT * FROM allopharma_articles WHERE (1=1$queryFilter) $queryOrder";
+
+  $render = [];
+  foreach(
+    $SqlConnection->FetchAll("$query $queryLimiter")
+    as
+    $article
+  ) {
+
+    $article = toClass($article);
+    // assign the article to the render node
+    array_push(
+      $render,
+      [
+        "id" => $article->Id * 1,
+        "illustrations" => explode(",", $article->IllustrationCSV),
+        "title" => htmlentities(str_replace("\\", "", $article->Title)),
+        "quantity" => $article->Quantity * 1,
+        "unit" => $article->Unit,
+        "type" => $article->Type,
+        "price" => $article->Price * EURO_MAD_RATIO,
+        "secondaryPrice" => ($article->Price * EURO_MAD_RATIO * (1 - ($article->Promotion/100))),
+        "soldout" => $article->Stock > 0 ? false : true,
+        "stock" => $article->Stock
+      ]
+    );
+  }
+
+  header("Content-type: application/json");
+  echo json_encode([
+    "articles" => $render,
+    "countAll" => $SqlConnection->NumRows($query)
+  ], JSON_PRETTY_PRINT);
+
+?>

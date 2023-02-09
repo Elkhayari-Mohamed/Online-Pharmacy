@@ -1,0 +1,544 @@
+@import '_variables';
+@import 'pharmacie.min.css';
+
+main#app_main {
+  min-height: 100vh;
+  overflow-x: initial;
+
+  .flex-gallery {
+    & > aside {
+      background: white;
+      z-index: 2;
+    }
+
+    & > aside.ak-stickyY {
+      position: sticky;
+      top: 1rem;
+      z-index: 1;
+    }
+  }
+
+  canvas.ak-chart {
+    width: 100%;
+    height: auto;
+  }
+
+  .toggle-input {
+    width: 25px;
+  }
+
+  nav.ak-products-head {
+    @extend .flexRowFull;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+
+    aside {
+      @extend .flexRowFull;
+      justify-content: space-between;
+      align-items: center;
+
+      label.ak-products-off {
+        @extend .BarlowFont;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+    }
+
+    .ak-cuteBtn {
+
+      &.ak-circle {
+        width: 30px;
+        height: 30px;
+        font-size: .9em;
+        border-radius: 50%;
+        padding: 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &.ak-nomargins {
+        margin: 0 !important;
+      }
+
+    }
+
+    a:not(:last-of-type) {
+      margin-right: .5rem;
+    }
+  }
+
+  table.ak-products {
+    table-layout: fixed;
+
+    tr:hover {
+      background: lighten($primaryColor, 42%);
+    }
+
+    td,
+    th {
+
+      &.ak-stretch {
+        width: 100%;
+      }
+
+      &:first-of-type {
+        border-top-left-radius: .5rem;
+        border-bottom-left-radius: .5rem;
+      }
+      &:last-of-type {
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+      }
+
+      span.ak-name {
+        font-size: 1.1em;
+        font-weight: 600;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+      }
+
+      span.ak-product-stats {
+        margin-top: .3rem;
+        font-size: 1em;
+        color: #444;
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+
+        span.ak-stock {
+          color: #4caf50;
+          text-transform: uppercase;
+          font-weight: 600;
+          font-size: .9em;
+          margin-left: 4px;
+          &.ak-soldout {
+            color: #e91e63;
+          }
+        }
+      }
+
+      span.ak-status-badge {
+        margin-left: .25rem;
+        padding: .35rem .75rem;
+        font-size: .9em;
+      }
+    }
+
+    img {
+      width: 60px;
+      max-height: 60px;
+      margin: 0 auto;
+    }
+
+  }
+
+  menu > header.ak-sticky {
+    position: sticky;
+    top: -2px;
+    background: white;
+    z-index: #{$maxZindex - 10};
+    padding: 0 0 1rem 0;
+    transform-style: preserve-3d;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 5%;
+      top: 0;
+      width: 90%;
+      height: 100%;
+      box-shadow: 0 .1rem 1rem rgba(grey, .35);
+      transform: translateZ(-1px);
+    }
+  }
+
+
+  menu.ak-product-creation {
+
+    form {
+      width: 100%;
+    }
+
+    aside.ak-form-suportive {
+      @extend .flexRowFull;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    #quilljsRenderer {
+      height: auto;
+      max-width: 100%;
+    }
+
+    section.illustrations-area {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+      margin: 0 -.5rem 1rem;
+      border-radius: 1rem;
+
+      figure {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid rgba(grey, .3);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all .15s ease, visibility .01s ease;
+        height: 80px;
+        width: 80px;
+        overflow: hidden;
+        position: relative;
+        margin: 0 .5rem;
+        padding: .5rem;
+        box-sizing: border-box;
+        margin-bottom: .5rem;
+        background: white;
+
+        &.dragging {
+          opacity: .25;
+          visibility: hidden;
+          //transition: all 0s;
+          transform: scale(.4);
+        }
+
+        &.dropping {
+          // nothing for the moment
+        }
+
+
+        input[type='file'] {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          cursor: inherit;
+        }
+
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+
+        *:not(input) {
+          pointer-events: none;
+        }
+
+        &:hover {
+          background: rgba(grey, .1);
+        }
+      }
+
+
+      .illustrations-drop-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: rgba(white, .75);
+        width: 100%;
+        height: 100%;
+        z-index: #{$maxZindex};
+        transition: all .15s ease;
+        border-radius: inherit;
+        @extend .flexRowFull;
+        justify-content: space-evenly;
+        box-sizing: border-box;
+        opacity: 0;
+        visibility: hidden;
+
+        section {
+          padding: 1rem;
+          transition: all .15s ease;
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 2em;
+          flex: 1;
+
+          i {
+            padding: 1rem;
+            transition: all .15s ease;
+            border-radius: 8px;
+            background: transparent;
+
+            &.dragover {
+              background: rgba(red, .5);
+              color: darken(red, 15%);
+            }
+          }
+        }
+      }
+
+      &.dragging {
+        .illustrations-drop-area {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+menu.nav-menu {
+  position: sticky;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  @extend .BarlowFont;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(grey, .25);
+    border-radius: 4px;
+    overflow: hidden;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1rem;
+    }
+
+    &[data-legend]::before {
+      content: attr(data-legend);
+      position: relative;
+      display: block;
+      background: linear-gradient(to left, rgba(grey, .12), transparent);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size-adjust: auto;
+      font-size: 1.05em;
+      border-bottom: 1px solid rgba(grey, .12);
+    }
+
+    &::before,
+    & > a {
+      padding: .75rem 1rem;
+    }
+
+    & > a {
+      @extend .flexRowFull;
+      align-items: baseline;
+      justify-content: space-between;
+      transition: all .15s ease;
+      margin: 0 .5rem 0;
+      border-radius: 4px;
+      overflow: hidden;
+      font-weight: 500;
+      font-size: .95em;
+      margin-bottom: .25rem;
+
+      &:first-of-type {
+        margin-top: .5rem;
+      }
+      &:last-of-type {
+        margin-bottom: .5rem;
+      }
+
+      &:hover {
+        background: lighten($primaryColor, 40%);
+        color: darken($primaryColor, 10%);
+      }
+
+      &:active {
+        background: lighten($primaryColor, 37%);
+        color: darken($primaryColor, 15%);
+      }
+
+      &.active {
+        font-weight: 600;
+        background: lighten($primaryColor, 37%);
+        color: darken($primaryColor, 15%);
+      }
+
+      & > i {
+        margin-right: .5rem;
+        font-size: .9em;
+        min-width: 20px;
+        text-align: center;
+      }
+
+      & > span {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &[data-bulle]:not([data-bulle=""]):not([data-bulle="0"])::after {
+        content: attr(data-bulle);
+        position: relative;
+        display: block;
+        background: darken($primaryColor, 0%);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 1rem;
+        font-size: .9em;
+        font-family: inherit;
+        min-width: 20px;
+        text-align: center;
+        margin: 0 -.25rem 0 .5rem;
+      }
+    }
+  }
+}
+
+figure.search-global {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 102;
+  transform-style: preserve-3d;
+  min-width: 500px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  padding: 3rem 1rem;
+
+  &::before {
+    content: '';
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100vw;
+    height: 200vh;
+    background: rgba(black, .8);
+    backdrop-filter: blur(.5rem);
+    -webkit-backdrop-filter: blur(.5rem);
+    -moz-backdrop-filter: blur(.5rem);
+    -o-backdrop-filter: blur(.5rem);
+    -ms-backdrop-filter: blur(.5rem);
+    transform: translateX(-50%) translateY(-50%) translateZ(-1px);
+  }
+
+  form {
+    width: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background: white;
+    box-shadow: .25rem .25rem 2rem rgba(black, .25);
+    border-radius: 1rem;
+  }
+
+  input,
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    @extend .BarlowFont;
+    font-size: 1.3em;
+  }
+
+  input {
+    padding: 1rem 1rem 1rem 1.5rem;
+    flex: 1;
+  }
+
+  button {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all .15s ease;
+
+    &:hover,
+    &:focus {
+      background: lighten($primaryColor, 35%);
+      color: darken($primaryColor, 20%);
+    }
+
+    &:active {
+      background: lighten($primaryColor, 30%);
+      color: darken($primaryColor, 30%);
+    }
+
+    &[data-actor="close"] {
+      &:hover,
+      &:focus {
+        background: lighten($redColor, 25%);
+        color: darken($redColor, 20%);
+      }
+
+      &:active {
+        background: lighten($redColor, 20%);
+        color: darken($redColor, 30%);
+      }
+    }
+  }
+
+  section.history {
+    position: relative;
+    margin-top: 1rem;
+    @extend .BarlowFont;
+    font-size: 15px;
+    overflow: hidden;
+    border-radius: 4px;
+
+    &::before {
+      content: attr(data-label);
+      display: block;
+      position: relative;
+      flex: 1;
+      width: 100%;
+      font-size: 15px;
+      font-weight: 500;
+      color: #828282;
+      padding: .5rem 0;
+    }
+
+    li {
+      list-style: none;
+      transition: all .15s ease;
+      padding: .6rem 2rem;
+      background: white;
+      cursor: pointer;
+      position: relative;
+      font-size: 1em;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:not(:last-of-type)::before {
+        content: '';
+        position: absolute;
+        left: 5%;
+        width: 90%;
+        height: 1px;
+        background: rgba(grey, .15);
+        bottom: 0;
+        display: block;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      &:hover,
+      &:focus {
+        background: linear-gradient(to right, lighten($primaryColor, 35%), transparent) white;
+        color: darken($primaryColor, 20%);
+      }
+
+    }
+  }
+}
+
+.flex-table.ak-cuteRows {
+  zoom: .85;
+}

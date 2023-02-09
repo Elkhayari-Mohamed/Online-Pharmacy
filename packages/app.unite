@@ -1,0 +1,92 @@
+<?php
+
+  // Get server url
+  $_SERVER['SERVER_URL'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+  // simple function for visualizing all kind of variables
+  function visualizeVar(){
+    print '<pre>';
+    foreach(func_get_args() as $arg){
+      var_dump($arg);
+    }
+    print '</pre>';
+  }
+
+  // Required modules to import
+  $requirements = [
+    "defines",
+    "configuration",
+    "sqlConnection", "sqlConnection_noInjections",
+    "cookies",
+    "user"
+  ];
+
+  // Looping throught the requirement array and import each one of them
+  foreach($requirements as $requirement) {
+    require __DIR__."/$requirement";
+  }
+
+  // Transform a simple array to a class
+  function toClass($array) {
+    return json_decode(json_encode($array));
+  }
+
+  function formatPrice($value, $currency="Dhs", $convertRatio=EURO_MAD_RATIO) {
+    return number_format(floatval($value * $convertRatio), 2, ",", ".") . " Dhs";
+  }
+
+  function randomToken($length=10, $range="azertyuiopqsdfghjklmwxcvbn1234567890") {
+    $token = "";
+    while(strlen($token) < $length) $token .= str_split($range)[rand(0, strlen($range)-1)];
+    return $token;
+  }
+
+
+  function array_entries($array, $returnObject=true) {
+    $render = [];
+    foreach($array as $i => $_) {
+      array_push(
+        $render,
+        [
+          $i,
+          $_
+        ]
+      );
+    }
+    return $returnObject ? toClass($render) : $render;
+  }
+
+  function months() {
+    return [
+      "",
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ];
+  }
+
+  function dateToString($time, $format="%d %m %y à %h:%i") {
+    $date = date("Y-m-d H:i:s", $time);
+    $month = intval(date("m", $time));
+    $monthName = months()[$month];
+
+
+    $format = str_replace("%y", date("Y", $time), $format);
+    $format = str_replace("%m", $monthName, $format);
+    $format = str_replace("%d", date("d", $time), $format);
+    $format = str_replace("%h", date("H", $time), $format);
+    $format = str_replace("%i", date("i", $time), $format);
+    $format = str_replace("%s", date("s", $time), $format);
+
+    return $format;
+  }
+?>

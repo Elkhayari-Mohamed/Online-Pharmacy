@@ -1,0 +1,10 @@
+RewriteEngine On
+
+RewriteRule ^profile/([^\.]+)/(.*)$ profile.php?tab=$1&key=$2 [NC,L]
+RewriteRule ^profile/([^\.]+)$ profile.php?tab=$1 [NC,L]
+RewriteRule ^checkout/([^\.]+)$ checkout.php?package=$1 [NC,L]
+RewriteRule ^product/([0-9]*)/(.*)$ product.php?id=$1&title=$2 [NC,L]
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+DirectoryIndex home.php

@@ -1,0 +1,149 @@
+<?php
+
+  class Client {
+
+    function __construct() {
+      global $Cookies,
+             $SqlConnection;
+
+      $this->Cookies = $Cookies;
+      $this->SqlConnection = $SqlConnection;
+
+      $this->isConnected = false;
+      $this->id = 0;
+      $this->get = false;
+      $this->hasAccess = false;
+      $this->lastConnexion = null;
+
+
+      $this->reConnect();
+    }
+
+    private function reConnect() {
+      $token = $this->Cookies->get("blended_allopharma_sessionToken");
+      if( !$token ) return false;
+
+      $resolve = $this->getBy(["Id" => $this->getByToken($token)]);
+      if( !$resolve ) return false;
+
+      $resolve = $this->Connect(
+        $resolve->Login,
+        $resolve->Password,
+        true
+      );
+
+      if( !$resolve || $resolve->Status != 0 ) $this->Disconnect();
+    }
+
+    public function Connect($login, $password, $emulated=false) {
+      if( !$emulated )
+        $loginConditions = ["Login" => $login, "Password" => md5($password)];
+      else
+        $loginConditions = ["Login" => $login];
+
+      $resolve = $this->getBy(
+        $loginConditions
+      );
+      if( !$resolve ) return false;
+
+      if( !$emulated ) $this->startNewSession($resolve->Id);
+
+      $this->isConnected = true;
+      $this->get = $resolve;
+      $this->id = $resolve->Id;
+      return $resolve;
+    }
+
+    public function Disconnect() {
+      $this->Cookies->remove("blended_allopharma_sessionToken");
+      $this->isConnected = false;
+      return true;
+    }
+
+    public function Register($feeds) {
+      if( gettype($feeds) == "object" ) $feeds = json_decode(json_encode($feeds), true);
+
+      $placeholders = join(", ", array_keys($feeds));
+      $values = join("', '", array_values($feeds));
+
+      $query = "INSERT INTO allopharma_accounts ($placeholders) VALUES('$values')";
+
+      return $this->SqlConnection->Insert($query);
+    }
+
+    public function getBy($conditions) {
+      $filters = "";
+      foreach(func_get_args() as $condition) {
+        $localFilters = "";
+        foreach($condition as $column => $value) {
+          if( strlen(trim($localFilters)) > 0 ) $localFilters .= " AND ";
+          $localFilters .= "$column='$value'";
+        }
+
+        if( strlen(trim($filters)) > 0 ) $filters .= " OR ";
+        $filters .= "($localFilters)";
+      }
+
+      $query = "SELECT * FROM allopharma_accounts WHERE (1=1 AND ($filters))";
+      $res = $this->SqlConnection->Fetch($query);
+      return $res ? $res : false;
+    }
+
+    public function getByToken($token) {
+      $query = "SELECT ClientAccount, ExpireDate FROM allopharma_accounts_sessions WHERE (1=1 AND Token='$token')";
+      $resolve = $this->SqlConnection->Fetch($query);
+      if( !$resolve || time() > intval($resolve->ExpireDate) ) return 0;
+
+      return intval($resolve->ClientAccount);
+    }
+
+    public function startNewSession($clientId) {
+      $expireTime = time() + 60*60*24*365; // 1 Year long
+      $tokenTemplate = randomToken(20) . "~" . time();
+      $this->Cookies->set(
+        "blended_allopharma_sessionToken",
+        $tokenTemplate,
+        $expireTime
+      );
+      return $this->registerNewSession([
+        "Token" => $tokenTemplate,
+        "ClientAccount" => $clientId,
+        "CreationDate" => time(),
+        "ExpireDate" => $expireTime
+      ]);
+    }
+
+    public function registerNewSession($params) {
+      $params = toClass($params);
+
+      $agentInfos = base64_encode(json_encode([]));
+
+      $query = "INSERT INTO allopharma_accounts_sessions
+      (Token, CreationDate, ClientAccount, ExpireDate, AgentInfos)
+      VALUES('$params->Token', '$params->CreationDate', '$params->ClientAccount', '$params->ExpireDate', '$agentInfos')";
+
+      $this->SqlConnection->Insert($query);
+      return $params->Token;
+    }
+
+
+    public function getNotifications($client=false) {
+      if( !$client ) $client = $this->id;
+      return toClass([
+        "All" => $this->SqlConnection->FetchAll(
+          "SELECT * FROM allopharma_notifications WHERE (ClientId='$client') ORDER BY CreatedAt DESC"
+        ),
+        "Opened" => $this->SqlConnection->FetchAll(
+          "SELECT * FROM allopharma_notifications WHERE (ClientId='$client' AND Opened) ORDER BY CreatedAt DESC, OpenedAt DESC"
+        ),
+        "unOpened" => $this->SqlConnection->FetchAll(
+          "SELECT * FROM allopharma_notifications WHERE (ClientId='$client' AND !Opened) ORDER BY CreatedAt DESC"
+        )
+      ]);
+    }
+
+  }
+
+  $Client = new Client();
+
+?>

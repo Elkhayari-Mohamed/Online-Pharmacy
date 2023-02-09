@@ -1,0 +1,14 @@
+<?php
+
+  define('now', date("Y-m-d H:i:s"));
+
+
+  // Getting the real root href of the server
+  define('DOMAIN', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
+  define('PROTOCOL', isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ? 'https' : 'http');
+  define('SITE_PATH', preg_replace('/index.php$/i', '', $_SERVER['PHP_SELF']));
+  $__siteRoot = PROTOCOL . '://' . DOMAIN . SITE_PATH;
+  $__siteRoot = substr($__siteRoot, 0, strpos($__siteRoot, basename($__siteRoot)));
+  define('SITE_ROOT', $__siteRoot);
+
+?>

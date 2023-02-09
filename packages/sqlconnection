@@ -1,0 +1,89 @@
+<?php
+
+  class SqlConnection{
+
+    public $Ready = false;
+    protected $Hostname = "localhost";
+    protected $Username = "root";
+    protected $Password = "";
+    protected $SelectedDatabase = "allopharmacy";
+
+    public function __construct($host, $user, $pass, $database){
+
+      $this->Hostname = $host;
+      $this->Username = $user;
+      $this->Password = $pass;
+      $this->SelectedDatabase = $database;
+
+      if($this->Connection = mysqli_connect($this->Hostname, $this->Username, $this->Password, $this->SelectedDatabase)){
+        $this->Ready = true;
+        $this->Connection->set_charset("utf8mb4");
+        return true;
+      }
+      else {
+        echo "Erreur : Impossible de se connecter à MySQL." . PHP_EOL;
+        echo "Errno de débogage : " . mysqli_connect_errno() . PHP_EOL;
+        echo "Erreur de débogage : " . mysqli_connect_error() . PHP_EOL;
+        exit();
+      }
+
+    }
+
+    public function selectDatabase($name){
+      return $this->Connection->select_db($name);
+    }
+
+    public function Query($query){
+      $query .= ";";
+      return mysqli_query($this->Connection, $query);
+    }
+
+    public function Insert($query){
+      $query .= ";";
+      if( $this->Query($query) )
+        return true;
+    }
+
+    public function UpdateStr($updates){
+      if( !is_array($updates) || (is_array($updates) && count($updates) <= 0 ) )
+        return false;
+
+      $updateStr = "";
+
+      $updateArr = [];
+      foreach($updates as $column => $value){
+        array_push($updateArr, "$column='$value'");
+      }
+
+      return join(", ", $updateArr);
+    }
+
+    public function NumRows($query){
+      if( $request = $this->Query($query) ){
+        return $request->num_rows;
+      }
+      else return 0;
+    }
+
+    public function Fetch($query){
+      if( $request = $this->Query($query) ){
+        $result = $request->fetch_array(MYSQLI_ASSOC);
+        return $result ? toClass($result) : false;
+      }
+    }
+
+    public function FetchAll($query){
+      if( $request = $this->Query($query) ){
+        return toClass($request->fetch_all(MYSQLI_ASSOC));
+      }
+    }
+
+  }
+  $SqlConnection = new SqlConnection(
+    DB_HOST,
+    DB_USER,
+    DB_PASS,
+    DB_NAME
+  );
+
+?>

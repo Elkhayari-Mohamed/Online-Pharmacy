@@ -1,0 +1,85 @@
+<footer id="app_footer">
+  <section>
+
+    <aside>
+      <a href="<?php print SITE_ROOT ?>" class="ak-logo">
+        <?php include __DIR__."/logo"; ?>
+      </a>
+    </aside>
+
+    <aside data-label="Communauté">
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Rechercher un médicament
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Commentaires
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> FAQs
+      </a>
+    </aside>
+
+    <aside data-label="Aide & contact">
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Contactez-nous
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Aide
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Livraison
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Pharmacovigilance
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Sécurité dispositifs médicaux
+      </a>
+      <a href="#">
+        <i class="far fa-chevron-right"></i> Aperçu des laboratoires
+      </a>
+    </aside>
+
+    <aside data-label="Newsletter">
+      <div class="newsletter-diffuser">
+        <i class="far fa-gift ak-diffuser"></i>
+        <ul>
+          <li><i class="far fa-check"></i> Offres et promotions spéciales</li>
+          <li><i class="far fa-check"></i> Bons d'achat exclusifs</li>
+          <li><i class="far fa-check"></i> Cadeaux</li>
+          <a href="#" class="ak-cuteBtn ak-green">
+            <span>
+              <i class="far fa-envelope-open-text"></i>
+              S'inscrire
+            </span>
+          </a>
+        </ul>
+      </div>
+    </aside>
+
+    <aside data-label="Modes de livraison">
+      <div class="img-gallery">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/amana_delivery.png" class="method_or_brand" alt="amana_delivery">
+      </div>
+    </aside>
+
+    <aside data-label="Moyens de paiement">
+      <div class="img-gallery">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/visa.svg" class="method_or_brand" alt="visa">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/mastercard.svg" class="method_or_brand" alt="mastercard">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/blue_card.svg" class="method_or_brand" alt="carte bleue">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/bank_withdraw.svg" class="method_or_brand" alt="virement bancaire">
+        <img src="<?php print SITE_ROOT ?>assets/sprites/paypal.svg" class="method_or_brand" alt="paypal">
+      </div>
+    </aside>
+
+    <aside class="ak-large ak-center ak-ending">
+      <span>
+        Copyright © AlloPharmacie 2021 All rights reserved | Designed and empowered by <b>ASH</b>
+      </span>
+    </aside>
+
+  </section>
+</footer>
+
+<script src="<?php print SITE_ROOT ?>core/javascripts/pharmacie.min.js" charset="utf-8"></script>

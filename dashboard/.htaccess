@@ -1,0 +1,6 @@
+RewriteEngine On
+
+RewriteRule ^([^\.]+)/([^\.]+)$ home.php?tab=$1&key=$2 [QSA,L]
+RewriteRule ^([^\.]+)$ home.php?tab=$1 [QSA,L]
+
+DirectoryIndex home.php

@@ -1,0 +1,48 @@
+// Declaring variables
+$maxWidth: 1200px;
+$primaryColor: #2196f3;
+$redColor: #ff5858;
+$fontGrey: #464646;
+$maxZindex: 1000;
+
+
+// Defining fonts classes
+
+.OpenSansFont {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.MontserratFont {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.BarlowFont {
+  font-family: 'Barlow', sans-serif !important;
+}
+
+// Defining repeatitive params
+.flex {
+  display: flex;
+}
+
+.flexRow {
+  flex-direction: row;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.flexWrap {
+  flex-wrap: wrap;
+}
+
+.simpleTransition {
+  transition: all .25s ease;
+}
+
+.flexRowFull {
+  @extend .flex;
+  @extend .flexRow;
+  @extend .flexWrap;
+}

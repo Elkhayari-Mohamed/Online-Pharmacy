@@ -1,0 +1,29 @@
+<head>
+  <title>AlloPharmacie - Univers d'administration</title>
+  <meta charset="utf-8">
+  <!--
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  -->
+  <title>AlloPharmacie - Accueil</title>
+  <!-- Importing pro font awesome modules -->
+  <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.15.0/css/pro.min.css">
+
+  <!-- Importing local personal design modules -->
+  <link rel="stylesheet" href="<?php print ADMIN_SITE_ROOT ?>core/stylesheets/pharmacie-administration.min.css">
+
+  <!-- Importing local personal javascript modules -->
+
+
+  <!-- Runtime javascripts -->
+  <script type="text/javascript">
+    location.__proto__.rootHref = new String("<?php print ADMIN_SITE_ROOT ?>");
+  </script>
+
+
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/blendedStorage.js" charset="utf-8"></script>
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/ashQuery.js" charset="utf-8"></script>
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/ashSwiper.js" charset="utf-8"></script>
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/ashTooltip.js" charset="utf-8"></script>
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/pharmacie-runtime.js" charset="utf-8"></script>
+  <script src="<?php print ADMIN_SITE_ROOT ?>core/javascripts/pharmacie-administration.min.js" charset="utf-8"></script>
+</head>

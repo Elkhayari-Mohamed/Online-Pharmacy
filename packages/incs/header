@@ -1,0 +1,79 @@
+<header id="app_header">
+  <section class="head">
+    <a href="<?php print SITE_ROOT ?>" class="ak-logo">
+      <?php include __DIR__."/logo"; ?>
+    </a>
+
+    <div class="search-input">
+      <input type="text" name="q" value="" required placeholder="Rechercher un produit, une marque...">
+      <button type="submit">
+        <i class="far fa-search"></i>
+      </button>
+      <script type="text/javascript">
+        (function(){
+          let parentNode = document.currentScript.parentNode;
+          let input = parentNode.querySelector("input");
+          let button = parentNode.querySelector("button");
+
+          const search = q => q.trim().length ? window.location.href = `${location.rootHref}articles?q=${encodeURIComponent(q)}` : false;
+
+          input.onkeyup = function(e) {
+            e = e || window.event;
+            if( e.key == "Enter" ) search.apply(this, [this.value]);
+          }
+
+          button.onclick = () => search.apply(input, [input.value]);
+        }());
+      </script>
+    </div>
+
+    <ul>
+      <li id="clientHeaderBtn">
+        <i class="far fa-user"></i>
+        <span>
+          Espace Client
+        </span>
+      </li>
+      <li data-bulle="0" id="cartHeaderBtn">
+        <i class="far fa-shopping-cart"></i>
+        <span>
+          Panier
+        </span>
+      </li>
+      <?php
+        if( $Client->isConnected ) {
+          ?>
+          <li id="clientNotificationsBtn" data-bulle="<?php print count($Client->getNotifications()->unOpened) ?>">
+            <i class="far fa-bell"></i>
+            <span>
+              Notifications
+            </span>
+          </li>
+          <?php
+        }
+      ?>
+    </ul>
+  </section>
+
+  <section class="menu">
+    <a href="<?php print SITE_ROOT ?>" class="active">
+      <i class="fa fa-home"></i>
+    </a>
+    <?php
+      foreach($SqlConnection->FetchAll("SELECT Id, Name FROM allopharma_categories ORDER BY CreationDate LIMIT 0, 4") as $i => $category) {
+        ?>
+        <a href="<?php print SITE_ROOT ?>articles?c=<?php print $category->Id ?>">
+          <?php print $category->Name ?>
+        </a>
+        <?php
+      }
+    ?>
+  </section>
+
+  <script type="text/javascript">
+    (function(){
+      if( clientHeaderBtn ) clientHeaderBtn.onclick = () => window.location.href = `${location.rootHref}profile`;
+      if( cartHeaderBtn ) cartHeaderBtn.onclick = () => window.location.href = `${location.rootHref}cart`;
+    }());
+  </script>
+</header>

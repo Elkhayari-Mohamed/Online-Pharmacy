@@ -1,0 +1,21 @@
+<?php
+
+  const
+    // Database server host
+    DB_HOST = "localhost",
+
+    // Database server user
+    DB_USER = "root",
+
+    // Database server user's password
+    DB_PASS = "",
+
+    // Database name
+    DB_NAME = "allopharmacy"
+  ;
+
+
+  // Convertion de prix euro en dhs
+  const EURO_MAD_RATIO = 9.84;
+
+?>

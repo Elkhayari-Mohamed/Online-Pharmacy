@@ -1,0 +1,1 @@
+<?php visualizeVar( $_GET ) ?>

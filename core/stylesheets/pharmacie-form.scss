@@ -1,0 +1,109 @@
+@import 'variables';
+
+form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  box-sizing: content-box;
+
+  fieldset {
+    @mixin size($width) {
+      min-width: $width;
+      max-width: $width;
+    }
+
+    cursor: text;
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 2px solid rgba(grey, .25);
+    color: inherit;
+    outline: none;
+    background: white;
+    transition: all .15s ease;
+    font-size: 15px;
+    box-shadow: 0 0 0 0 transparent;
+    flex: 1;
+    margin: 0 0 .35rem;
+    width: 100%;
+    min-width: 100%;
+    display: block;
+
+    &:not(.ak-small):not(.ak-x-small) {
+      @include size(100%);
+    }
+
+    &.ak-small {
+      @include size(calc(50% - 5px));
+    }
+
+    &.ak-x-small {
+      @include size(calc((100% / 3) - 5px));
+    }
+
+    legend {
+      padding: 4px .75rem 0;
+      transition: inherit;
+      margin: 0 .25rem;
+      font-weight: 600;
+      font-size: 1em;
+      background: inherit;
+      position: relative;
+      border-radius: 100%;
+    }
+
+    input,
+    textarea,
+    select {
+      position: relative;
+      width: 100%;
+      padding: .2rem 1rem .65rem;
+      border: none;
+      outline: none;
+      background: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: none;
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      text-indent: 0.01px;
+      text-overflow: '';
+    }
+
+    &:focus-within,
+    &[data-is-valid="true"] {
+      border-color: $primaryColor;
+      box-shadow: 0 0 0 4px lighten($primaryColor, 30%);
+      z-index: 2;
+
+      legend {
+        color: $primaryColor;
+      }
+    }
+
+    &[data-is-valid]:not([data-is-valid="true"]) {
+      border-color: $redColor;
+      box-shadow: 0 0 0 4px lighten($redColor, 20%);
+
+      legend {
+        color: $redColor;
+      }
+    }
+
+    input[required] + legend::before {
+      content: '*';
+      color: $redColor;
+      font-size: .7em;
+      position: absolute;
+      right: .3rem;
+      top: .25rem;
+    }
+  }
+
+}

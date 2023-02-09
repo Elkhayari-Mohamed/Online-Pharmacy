@@ -1,0 +1,32 @@
+<?php
+
+  class Cookies {
+
+    public function get($name) {
+      return isset($_COOKIE[$name]) ? $_COOKIE[$name] : false;
+    }
+
+    public function set($name, $value, $expireTime, $path="/") {
+      return setCookie(
+        $name,
+        $value,
+        time() + $expireTime,
+        $path
+      );
+    }
+
+    public function remove($name) {
+      return $this->set(
+        $name,
+        null,
+        time() - 1,
+        "/"
+      );
+    }
+
+  }
+
+
+  $Cookies = new Cookies();
+
+?>

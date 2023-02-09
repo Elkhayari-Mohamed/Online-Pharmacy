@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^([^\.]+)$ router.php?routes=$1 [NC,L]

@@ -1,0 +1,65 @@
+<?php
+
+  $_ROUTES_ASSIGNS = [
+    "id",
+    "search",
+    "page",
+    "records"
+  ];
+
+  $_ROUTES_FETCHS = [];
+  foreach($_ROUTES_ASSIGNS as $i => $key) {
+    // if we can't fetch the key value from ROUTES then we just skip
+    if( !array_key_exists($i, $_ROUTES) || $_ROUTES[$i] == skipSelector ) $_ROUTES[$i] = "";
+
+    $_ROUTES_FETCHS[ $key ] = $_ROUTES[$i];
+  }
+
+  extract($_ROUTES_FETCHS);
+  unset($_ROUTES_ASSIGNS);
+  unset($_ROUTES_FETCHS);
+
+
+  // Start api program
+  if( is_numeric($records) && intval($records) <= 0 ) killRouter("Fetching error, the records value must be greater than 0.");
+
+  $queryFilter = "";
+  $queryLimiter = "LIMIT ";
+
+  if(is_numeric($id))
+    $queryFilter .= " AND Id='$id'";
+  else {
+
+    if( $search ) $queryFilter .= " AND Title LIKE '%$search%'";
+
+    if( !$page ) $page = 1;
+    if( !$records ) $records = 1;
+    $startIndex = ($page - 1) * $records;
+
+    $queryLimiter .= "$startIndex, $records";
+
+  }
+
+  $render = [];
+  foreach(
+    $SqlConnection->FetchAll("SELECT * FROM allopharma_brands WHERE (1=1$queryFilter) $queryLimiter")
+    as
+    $record
+  ) {
+
+    $record = toClass($record);
+    // assign the article to the render node
+    array_push(
+      $render,
+      [
+        "id" => $record->Id,
+        "logos" => explode(",", $record->Logo),
+        "name" => trim($record->Name),
+      ]
+    );
+  }
+
+  header("Content-type: application/json");
+  echo json_encode($render, JSON_PRETTY_PRINT);
+
+?>

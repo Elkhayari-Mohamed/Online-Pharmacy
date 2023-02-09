@@ -1,0 +1,18 @@
+<?php
+
+  foreach($_GET as $key => $value) {
+    $_GET[$key] = mysqli_real_escape_string($SqlConnection->Connection, $value);
+  }
+
+  foreach($_POST as $key => $value) {
+    $_POST[$key] = mysqli_real_escape_string($SqlConnection->Connection, $value);
+  }
+
+
+  if( isset($_ROUTES) ) {
+    foreach($_ROUTES as $key => $value) {
+      $_ROUTES[$key] = mysqli_real_escape_string($SqlConnection->Connection, $value);
+    }
+  }
+
+?>

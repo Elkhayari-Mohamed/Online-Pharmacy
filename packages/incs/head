@@ -1,0 +1,27 @@
+<?php include __DIR__."/../app.unite"; ?>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AlloPharmacie - Accueil</title>
+  <!-- Importing pro font awesome modules -->
+  <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.15.0/css/pro.min.css">
+
+  <!-- Importing local personal design modules -->
+  <link rel="stylesheet" href="<?php print SITE_ROOT ?>core/stylesheets/pharmacie.min.css">
+
+  <!-- Importing local personal javascript modules -->
+
+
+  <!-- Runtime javascripts -->
+  <script type="text/javascript">
+    location.__proto__.rootHref = new String("<?php print SITE_ROOT ?>");
+  </script>
+
+
+  <script type="text/unloadable-javascript" src="<?php print SITE_ROOT ?>core/javascripts/blendedPrompts.js" charset="utf-8"></script>
+  <script src="<?php print SITE_ROOT ?>core/javascripts/ashQuery.js" charset="utf-8"></script>
+  <script src="<?php print SITE_ROOT ?>core/javascripts/ashSwiper.js" charset="utf-8"></script>
+  <script src="<?php print SITE_ROOT ?>core/javascripts/ashTooltip.js" charset="utf-8"></script>
+  <script src="<?php print SITE_ROOT ?>core/javascripts/pharmacie-runtime.js" charset="utf-8"></script>
+  <script src="<?php print SITE_ROOT ?>core/javascripts/pharmacie-cart.js" async charset="utf-8"></script>
+</head>
